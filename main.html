@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Selection</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #background {
+            background-image: url('https://source.unsplash.com/1920x1080/?education');
+            background-size: cover;
+            background-repeat: no-repeat;
+            min-height: 100vh; /* Set minimum height to full viewport height */
+            padding: 20px;
+            font-family: 'Gruppo', cursive;
+            color: white;
+        }
+
+        .card {
+            border-radius: 10px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-body {
+            border-radius: 10px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .list-group {
+            margin-top: 20px;
+        }
+
+        #collegeNames,
+        .card-title {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div class="container mt-5">
+            <h1 class="text-center mb-4">College Selection</h1>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="courseSelect">Select Course:</label>
+                        <select id="courseSelect" class="form-control" onchange="showColleges()">
+                            <option value="">Select Course</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="M.Tech">M.Tech</option>
+                            <option value="B.Sc">B.Sc</option>
+                            <option value="B.Com">B.Com</option>
+                            <option value="BBA">BBA</option>
+                            <option value="BCA">BCA</option>
+                            <option value="B.Arch">B.Arch</option>
+                            <option value="M.Arch">M.Arch</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card" id="collegeList" style="display:none;">
+                        <div class="card-body">
+                            <h2 class="card-title mb-0">Colleges offering the selected course:</h2>
+                            <ul class="list-group" id="collegeNames"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var collegesByCourse = {
+            "B.Tech": [
+                { name: "College of Engineering Trikaripur", district: "Kasaragod" },
+                { name: "Sree Narayana Guru College of Engineering & Technology, Payyanur", district: "Kasaragod" },
+                { name: "Government College of Engineering, Kannur", district: "Kannur" },
+                { name: "Chinmaya Institute of Technology, Kannur", district: "Kannur" },
+                { name: "Government Engineering College, Wayanad", district: "Wayanad" },
+                { name: "Malabar Institute of Technology, Kozhikode", district: "Kozhikode" },
+                { name: "MES College of Engineering, Kuttippuram", district: "Malappuram" },
+                { name: "MET's School of Engineering, Thrissur", district: "Thrissur" },
+                { name: "Rajagiri College of Social Sciences, Kochi", district: "Ernakulam" },
+                { name: "Heera College of Engineering and Technology, Thiruvananthapuram", district: "Thiruvananthapuram" },
+                { name: "TKM College of Engineering, Kollam", district: "Kollam" },
+                { name: "Musaliar College of Engineering and Technology, Pathanamthitta", district: "Pathanamthitta" }
+            ],
+            "M.Tech": [
+                { name: "College of Engineering Trikaripur", district: "Kasaragod" },
+                { name: "Sree Narayana Guru College of Engineering & Technology, Payyanur", district: "Kasaragod" },
+                { name: "Government College of Engineering, Kannur", district: "Kannur" },
+                { name: "Chinmaya Institute of Technology, Kannur", district: "Kannur" },
+                { name: "Government Engineering College, Wayanad", district: "Wayanad" },
+                { name: "Malabar Institute of Technology, Kozhikode", district: "Kozhikode" },
+                { name: "MES College of Engineering, Kuttippuram", district: "Malappuram" },
+                { name: "MET's School of Engineering, Thrissur", district: "Thrissur" },
+                { name: "Rajagiri College of Social Sciences, Kochi", district: "Ernakulam" },
+                { name: "Heera College of Engineering and Technology, Thiruvananthapuram", district: "Thiruvananthapuram" },
+                { name: "TKM College of Engineering, Kollam", district: "Kollam" },
+                { name: "Musaliar College of Engineering and Technology, Pathanamthitta", district: "Pathanamthitta" }
+            ],
+            "B.Sc": [
+                { name: "St. Teresa's College", district: "Ernakulam" },
+                { name: "St. Albert's College", district: "Ernakulam" },
+                { name: "Sacred Heart College", district: "Ernakulam" }
+            ],
+            "B.Com": [
+                { name: "Government Victoria College", district: "Palakkad" },
+                { name: "Mar Thoma College", district: "Malappuram" },
+                { name: "CMS College", district: "Kottayam" }
+            ],
+            "BBA": [
+                { name: "Farook College", district: "Kozhikode" },
+                { name: "St. Joseph's College", district: "Kannur" },
+                { name: "Mar Ivanios College", district: "Thiruvananthapuram" }
+            ],
+            "BCA": [
+                { name: "TKM College of Arts and Science", district: "Kollam" }
+            ],
+            "B.Arch": [
+                { name: "College of Engineering Trikaripur", district: "Kasaragod" },
+                { name: "Government Polytechnic College", district: "Alappuzha" },
+                { name: "College of Engineering, Kallooppara", district: "Pathanamthitta" }
+            ],
+            "M.Arch": [
+                { name: "College of Engineering Trikaripur", district: "Kasaragod" },
+                { name: "Government Polytechnic College", district: "Alappuzha" },
+                { name: "College of Engineering, Kallooppara", district: "Pathanamthitta" }
+            ]
+
+        };
+
+        function showColleges() {
+            var course = document.getElementById("courseSelect").value;
+            var collegeList = document.getElementById("collegeNames");
+            collegeList.innerHTML = "";
+
+            if (course) {
+                collegesByCourse[course].forEach(function(college) {
+                    var listItem = document.createElement("li");
+                    listItem.textContent = college.name + " - " + college.district;
+                    collegeList.appendChild(listItem);
+                });
+                document.getElementById("collegeList").style.display = "block";
+            } else {
+                document.getElementById("collegeList").style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
